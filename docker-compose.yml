@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - ./data:/app/data  # Persistenza DB SQLite
+    environment:
+      - NODE_ENV=development
+
+  mysql:
+    image: mysql:8
+    container_name: mysql-todolist
+    environment:
+      MYSQL_ROOT_PASSWORD: 
+      MYSQL_DATABASE: todolist
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+    ports:
+      - "3000:3000"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

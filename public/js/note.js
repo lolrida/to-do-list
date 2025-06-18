@@ -16,6 +16,7 @@ async function addNote() {
   loadNotes();
 }
 
+
 async function loadNotes() {
   const res = await fetch('/api/notes');
   const notes = await res.json();
