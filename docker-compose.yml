@@ -4,10 +4,10 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - "3306:3306"
     volumes:
       - .:/app
-      - ./data:/app/data  # Persistenza DB SQLite
+      - ./data:/app/data 
     environment:
       - NODE_ENV=development
 
@@ -20,7 +20,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: 
     ports:
-      - "3000:3000"
+      - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
 

@@ -16,29 +16,65 @@ async function addNote() {
   loadNotes();
 }
 
-
 async function loadNotes() {
-  const res = await fetch('/api/notes');
+  const res = await fetch('/notes');
   const notes = await res.json();
-  const list = document.getElementById('noteList');
-  list.innerHTML = '';
-
-  // Ordina per priorità (Alta > Media > Bassa)
-  const priorityOrder = { "Alta": 0, "Media": 1, "Bassa": 2 };
-  notes.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-
+  const notesList = document.getElementById('notesList');
+  notesList.innerHTML = '';
   notes.forEach(note => {
-    const li = document.createElement('li');
-    li.textContent = `[${note.priority}] ${note.text}`;
-    li.onclick = () => deleteNote(note.id);
-    list.appendChild(li);
+    const col = document.createElement('div');
+    col.className = 'col-md-4 mb-3';
+    col.innerHTML = `
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <p class="card-text" id="note-content-${note.id}">${note.content}</p>
+          <button class="btn btn-warning btn-sm" onclick="showEditModal(${note.id}, '${note.content.replace(/'/g, "\\'")}')">Modifica</button>
+        </div>
+      </div>
+    `;
+    notesList.appendChild(col);
   });
 }
 
-async function deleteNote(id) {
-  await fetch(`/api/notes/${id}`, { method: 'DELETE' });
-  loadNotes();
+// Aggiungi una nuova nota
+document.getElementById('addNoteForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const content = document.getElementById('noteContent').value;
+  const res = await fetch('/notes', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content })
+  });
+  if (res.ok) {
+    document.getElementById('noteContent').value = '';
+    loadNotes();
+  }
+});
+
+// Mostra il modal di modifica
+window.showEditModal = function(id, content) {
+  document.getElementById('editNoteId').value = id;
+  document.getElementById('editNoteContent').value = content;
+  var editModal = new bootstrap.Modal(document.getElementById('editNoteModal'));
+  editModal.show();
 }
+
+// Salva la modifica della nota
+document.getElementById('editNoteForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const id = document.getElementById('editNoteId').value;
+  const content = document.getElementById('editNoteContent').value;
+  const res = await fetch(`/notes/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content })
+  });
+  if (res.ok) {
+    var editModal = bootstrap.Modal.getInstance(document.getElementById('editNoteModal'));
+    editModal.hide();
+    loadNotes();
+  }
+});
 
 // Carica le note all'avvio
 window.onload = loadNotes;
