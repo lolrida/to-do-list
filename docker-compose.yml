@@ -1,24 +1,18 @@
-version: '3.8'
+
+
+
+
+
 
 services:
-  app:
-    build: .
-    ports:
-      - "3306:3306"
-    volumes:
-      - .:/app
-      - ./data:/app/data 
-    environment:
-      - NODE_ENV=development
-
   mysql:
     image: mysql:8
     container_name: mysql-todolist
     environment:
-      MYSQL_ROOT_PASSWORD: 
-      MYSQL_DATABASE: todolist
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notes
+      MYSQL_USER: todouser
+      MYSQL_PASSWORD: todo
     ports:
       - "3306:3306"
     volumes:
