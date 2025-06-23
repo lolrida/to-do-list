@@ -1,5 +1,3 @@
-app.use(express.json());
-
 async function addNote() {
   const input = document.getElementById('noteInput');
   const priorityInput = document.getElementById('priorityInput');
@@ -8,7 +6,7 @@ async function addNote() {
 
   if (!text) return;
 
-  await fetch('/api/notes', {
+  await fetch('/notes', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, priority })
