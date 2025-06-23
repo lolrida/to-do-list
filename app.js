@@ -47,3 +47,16 @@ app.put('/notes/:id', (req, res) => {
   });
 });
 
+app.delete('/notes/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM notes WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error("Errore eliminazione:", err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.sendStatus(204);
+  });
+});
+
+
+

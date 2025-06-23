@@ -25,13 +25,17 @@ async function loadNotes() {
     const col = document.createElement('div');
     col.className = 'col-md-4 mb-3';
     col.innerHTML = `
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <p class="card-text" id="note-content-${note.id}">${note.content}</p>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <p class="card-text" id="note-content-${note.id}">${note.content}</p>
+        <div class="d-flex justify-content-between">
           <button class="btn btn-warning btn-sm" onclick="showEditModal(${note.id}, '${note.content.replace(/'/g, "\\'")}')">Modifica</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteNote(${note.id})">Elimina</button>
         </div>
       </div>
-    `;
+    </div>
+  `;
+
     notesList.appendChild(col);
   });
 }
@@ -74,6 +78,21 @@ document.getElementById('editNoteForm').addEventListener('submit', async functio
     loadNotes();
   }
 });
+
+window.deleteNote = async function(id) {
+  if (!confirm('Sei sicuro di voler eliminare questa nota?')) return;
+
+  const res = await fetch(`/notes/${id}`, {
+    method: 'DELETE'
+  });
+
+  if (res.ok) {
+    loadNotes();
+  } else {
+    console.error("Errore nella cancellazione della nota.");
+  }
+};
+
 
 
 window.onload = loadNotes;
