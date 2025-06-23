@@ -1,3 +1,5 @@
+app.use(express.json());
+
 async function addNote() {
   const input = document.getElementById('noteInput');
   const priorityInput = document.getElementById('priorityInput');
@@ -36,7 +38,6 @@ async function loadNotes() {
   });
 }
 
-// Aggiungi una nuova nota
 document.getElementById('addNoteForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const content = document.getElementById('noteContent').value;
@@ -51,7 +52,7 @@ document.getElementById('addNoteForm').addEventListener('submit', async function
   }
 });
 
-// Mostra il modal di modifica
+
 window.showEditModal = function(id, content) {
   document.getElementById('editNoteId').value = id;
   document.getElementById('editNoteContent').value = content;
@@ -59,7 +60,7 @@ window.showEditModal = function(id, content) {
   editModal.show();
 }
 
-// Salva la modifica della nota
+
 document.getElementById('editNoteForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const id = document.getElementById('editNoteId').value;
@@ -76,5 +77,5 @@ document.getElementById('editNoteForm').addEventListener('submit', async functio
   }
 });
 
-// Carica le note all'avvio
+
 window.onload = loadNotes;

@@ -1,6 +1,5 @@
 const mysql = require('mysql2/promise');
 
-// Configura connessione (modifica con i tuoi dati)
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
