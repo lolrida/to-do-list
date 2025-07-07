@@ -93,6 +93,86 @@ window.deleteNote = async function(id) {
   }
 };
 
+let currentListId = null;
+
+async function loadLists() {
+  const res = await fetch('/lists');
+  const lists = await res.json();
+  const selector = document.getElementById('listSelector');
+  selector.innerHTML = '';
+  lists.forEach(list => {
+    const option = document.createElement('option');
+    option.value = list.id;
+    option.textContent = list.name;
+    selector.appendChild(option);
+  });
+
+  
+  if (lists.length > 0) {
+    currentListId = lists[0].id;
+    selector.value = currentListId;
+    loadNotes();
+  }
+}
+
+document.getElementById('listSelector').addEventListener('change', function() {
+  currentListId = this.value;
+  loadNotes();
+});
+
+async function createNewList() {
+  const name = prompt('Nome della nuova lista:');
+  if (!name) return;
+  await fetch('/lists', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name })
+  });
+  await loadLists();
+}
+
+async function loadLists() {
+  const res = await fetch('/lists');
+  const lists = await res.json();
+
+  const container = document.getElementById('listsContainer');
+  container.innerHTML = '';
+
+  for (const list of lists) {
+    const notesRes = await fetch(`/notes/${list.id}`);
+    const notes = await notesRes.json();
+
+    const col = document.createElement('div');
+    col.className = 'col-md-4';
+    col.innerHTML = `
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-secondary text-white fw-bold">${list.name}</div>
+        <div class="card-body p-2" id="list-${list.id}">
+          ${notes.map(note => `
+            <div class="card mb-2 shadow-sm">
+              <div class="card-body p-2">
+                <p class="mb-1">${note.content}</p>
+                <div class="d-flex justify-content-between">
+                  <button class="btn btn-sm btn-warning" onclick="showEditModal(${note.id}, '${note.content.replace(/'/g, "\\'")}')">Modifica</button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteNote(${note.id})">Elimina</button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    container.appendChild(col);
+  }
+}
+
+
+window.onload = () => {
+  loadLists();
+};
+
+
+
 
 
 window.onload = loadNotes;

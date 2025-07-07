@@ -58,5 +58,49 @@ app.delete('/notes/:id', (req, res) => {
   });
 });
 
+app.post('/lists', (req, res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: 'Il nome della lista è obbligatorio' });
+
+  db.query('INSERT INTO lists (name) VALUES (?)', [name], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(201).json({ id: result.insertId, name });
+  });
+});
+
+app.get('/lists', (req, res) => {
+  db.query('SELECT * FROM lists', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+app.get('/notes/:listId', (req, res) => {
+  const { listId } = req.params;
+  db.query('SELECT * FROM notes WHERE list_id = ?', [listId], (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+app.post('/notes', (req, res) => {
+  const { content, list_id } = req.body;
+  if (!content || !list_id) return res.status(400).json({ error: 'Contenuto e list_id obbligatori' });
+
+  db.query('INSERT INTO notes (content, list_id) VALUES (?, ?)', [content, list_id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(201).json({ id: result.insertId, content, list_id });
+  });
+});
+
+app.get('/lists', (req, res) => {
+  db.query('SELECT * FROM lists', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+
+
 
 

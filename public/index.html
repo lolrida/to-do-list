@@ -8,15 +8,27 @@
 <body class="bg-light">
   <div class="container py-5">
     <h1 class="mb-4">Le mie Note</h1>
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div class="w-75">
+    <label for="listSelector" class="form-label">Lista attiva:</label>
+    <select id="listSelector" class="form-select"></select>
+  </div>
+  <div class="ms-3 mt-4">
+    <button class="btn btn-outline-secondary" onclick="createNewList()">
+      ➕ Nuova Lista
+    </button>
+  </div>
+</div>
 
     <form id="addNoteForm" class="mb-4">
       <div class="input-group">
         <input type="text" class="form-control" id="noteContent" placeholder="Scrivi una nuova nota..." required>
         <button class="btn btn-primary" type="submit">Aggiungi</button>
+        
       </div>
     </form>
 
-    <div class="row" id="notesList"></div>
+    <div class="row" id="ListContainer"></div>
   </div>
 
   <div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
@@ -38,6 +50,7 @@
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
             <button type="submit" class="btn btn-success">Salva Modifiche</button>
           </div>
+          
         </form>
       </div>
     </div>
