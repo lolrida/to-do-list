@@ -11,7 +11,9 @@
 <div class="d-flex align-items-center justify-content-between mb-4">
   <div class="w-75">
     <label for="listSelector" class="form-label">Lista attiva:</label>
-    <select id="listSelector" class="form-select"></select>
+    
+<select id="listContainer" class="form-select mb-3"></select>
+
   </div>
   <div class="ms-3 mt-4">
     <button class="btn btn-outline-secondary" onclick="createNewList()">
@@ -28,7 +30,8 @@
       </div>
     </form>
 
-    <div class="row" id="ListContainer"></div>
+    
+<div id="notesList" class="row"></div>
   </div>
 
   <div class="modal fade" id="editNoteModal" tabindex="-1" aria-labelledby="editNoteModalLabel" aria-hidden="true">
